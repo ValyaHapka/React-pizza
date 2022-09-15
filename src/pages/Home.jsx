@@ -13,10 +13,10 @@ import { setCategoryID, setSortType, setCurrentPage } from '../redux/slices/filt
 export default function Home() {
   const { searchValue } = React.useContext(SearchContext);
 
-  const categoryID = useSelector((state) => state.filterSlice.categoryID);
-  const sortType = useSelector((state) => state.filterSlice.sort);
-  const sortOrder = useSelector((state) => state.filterSlice.sortOrderAsc);
-  const currentPage = useSelector((state) => state.filterSlice.currentPage);
+  const { categoryID, sort, sortOrderAsc, currentPage } = useSelector((state) => state.filterSlice);
+  // const sortType = useSelector((state) => state.filterSlice.sort);
+  // const sortOrder = useSelector((state) => state.filterSlice.sortOrderAsc);
+  // const currentPage = useSelector((state) => state.filterSlice.currentPage);
 
   const dispatch = useDispatch();
 
@@ -24,8 +24,8 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const categoryQuery = categoryID !== 0 ? `category=${categoryID}` : '';
-  const sortQuery = sortType.sort;
-  const order = sortOrder ? 'asc' : 'desc';
+  const sortQuery = sort.sort;
+  const order = sortOrderAsc ? 'asc' : 'desc';
 
   useEffect(() => {
     setIsLoaded(false);
@@ -48,7 +48,7 @@ export default function Home() {
           categoryIndex={categoryID}
           onClickCategory={(id) => dispatch(setCategoryID(id))}
         />
-        <Sort onClickSort={(id) => dispatch(setSortType(id))} sortOrder={sortOrder} />
+        <Sort onClickSort={(id) => dispatch(setSortType(id))} sortOrder={sortOrderAsc} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

@@ -18,8 +18,20 @@ export default function Sort({ sortOrder }) {
     setSortPopup(false);
   }
 
+  const sortRef = React.useRef();
+
+  React.useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.path.includes(sortRef.current)) {
+        setSortPopup(false);
+      }
+    };
+    document.body.addEventListener('click', handleOutsideClick);
+    return () => document.body.removeEventListener('click', handleOutsideClick);
+  }, []);
+
   return (
-    <div className="sort">
+    <div className="sort" ref={sortRef}>
       <div className="sort__label">
         {sortOrder ? (
           <svg
