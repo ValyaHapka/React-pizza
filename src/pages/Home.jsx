@@ -1,44 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryID, setSortType, setCurrentPage } from '../redux/slices/filterSlice';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import NotFound from './NotFound';
 
 export default function Home() {
-  const { searchValue } = React.useContext(SearchContext);
+  const searchValue = useSelector((state) => state.filterSlice.searchValue);
 
   const { categoryID, sort, sortOrderAsc, currentPage } = useSelector((state) => state.filterSlice);
-  // const sortType = useSelector((state) => state.filterSlice.sort);
-  // const sortOrder = useSelector((state) => state.filterSlice.sortOrderAsc);
-  // const currentPage = useSelector((state) => state.filterSlice.currentPage);
+  const { items, status } = useSelector((state) => state.pizzaSlice);
 
   const dispatch = useDispatch();
-
-  const [pizzas, setPizzas] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const categoryQuery = categoryID !== 0 ? `category=${categoryID}` : '';
   const sortQuery = sort.sort;
   const order = sortOrderAsc ? 'asc' : 'desc';
 
   useEffect(() => {
-    setIsLoaded(false);
+    const fetchingData = async () => {
+      dispatch(
+        fetchPizzas({
+          categoryQuery,
+          sortQuery,
+          order,
+          currentPage,
+        }),
+      );
+    };
+    fetchingData();
 
-    axios
-      .get(
-        `https://631646935b85ba9b11f404ca.mockapi.io/pizzas?page=${currentPage}&limit=4&${categoryQuery}&sortBy=${sortQuery}&order=${order}`,
-      )
-      .then((res) => {
-        setPizzas(res.data);
-        setIsLoaded(true);
-      });
     window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryQuery, sortQuery, order, currentPage]);
 
   return (
@@ -52,11 +50,15 @@ export default function Home() {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoaded
-          ? pizzas
-              .filter((pizza) => pizza.title.toLowerCase().includes(searchValue.toLowerCase()))
-              .map((pizza) => <PizzaBlock {...pizza} key={pizza.id} />)
-          : [...new Array(4)].map((_, i) => <Skeleton key={i} />)}
+        {status === 'loaded' ? (
+          items
+            .filter((pizza) => pizza.title.toLowerCase().includes(searchValue.toLowerCase()))
+            .map((pizza) => <PizzaBlock {...pizza} key={pizza.id} />)
+        ) : status === 'loading' ? (
+          [...new Array(4)].map((_, i) => <Skeleton key={i} />)
+        ) : (
+          <NotFound />
+        )}
       </div>
       <Pagination
         currentPage={currentPage}
