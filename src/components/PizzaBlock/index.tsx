@@ -4,7 +4,16 @@ import { setItem } from '../../redux/slices/cartSlice';
 import { selectItemById } from '../../redux/slices/pizzaSlice';
 import { Link } from 'react-router-dom';
 
-export default function PizzaBlock({ title, price, imageUrl, sizes, types, id }) {
+interface PizzaBlockProps {
+  title: string;
+  price: number;
+  imageUrl: string;
+  sizes: Array<number>;
+  types: Array<number>;
+  id: string;
+}
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({ title, price, imageUrl, sizes, types, id }) => {
   const dispatch = useDispatch();
   const item = useSelector(selectItemById(id));
   const [typeIndex, setTypeIndex] = useState(0);
@@ -76,4 +85,5 @@ export default function PizzaBlock({ title, price, imageUrl, sizes, types, id })
       </div>
     </div>
   );
-}
+};
+export default PizzaBlock;

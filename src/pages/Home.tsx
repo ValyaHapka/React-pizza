@@ -6,7 +6,7 @@ import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryID, setSortType, setCurrentPage } from '../redux/slices/filterSlice';
+import { setCategoryID, setCurrentPage } from '../redux/slices/filterSlice';
 import { fetchPizzas } from '../redux/slices/pizzaSlice';
 import NotFound from './NotFound';
 
@@ -25,6 +25,7 @@ export default function Home() {
   useEffect(() => {
     const fetchingData = async () => {
       dispatch(
+        // @ts-ignore
         fetchPizzas({
           categoryQuery,
           sortQuery,
@@ -44,16 +45,16 @@ export default function Home() {
       <div className="content__top">
         <Categories
           categoryIndex={categoryID}
-          onClickCategory={(id) => dispatch(setCategoryID(id))}
+          onClickCategory={(id: number) => dispatch(setCategoryID(id))}
         />
-        <Sort onClickSort={(id) => dispatch(setSortType(id))} sortOrder={sortOrderAsc} />
+        <Sort sortOrder={sortOrderAsc} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
         {status === 'loaded' ? (
           items
-            .filter((pizza) => pizza.title.toLowerCase().includes(searchValue.toLowerCase()))
-            .map((pizza) => <PizzaBlock {...pizza} key={pizza.id} />)
+            .filter((pizza: any) => pizza.title.toLowerCase().includes(searchValue.toLowerCase()))
+            .map((pizza: any) => <PizzaBlock {...pizza} key={pizza.id} />)
         ) : status === 'loading' ? (
           [...new Array(4)].map((_, i) => <Skeleton key={i} />)
         ) : (
@@ -62,7 +63,7 @@ export default function Home() {
       </div>
       <Pagination
         currentPage={currentPage}
-        onChangePage={(number) => dispatch(setCurrentPage(number))}
+        onChangePage={(number: number) => dispatch(setCurrentPage(number))}
       />
     </div>
   );

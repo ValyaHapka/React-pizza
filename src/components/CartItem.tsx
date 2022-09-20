@@ -2,7 +2,17 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setItem, removeItem, minusItem } from '../redux/slices/cartSlice';
 
-export default function CartItem({ imageUrl, title, price, count, id, type, size }) {
+interface CartItemProps {
+  imageUrl: string;
+  title: string;
+  price: number;
+  count: number;
+  id: string;
+  type: string;
+  size: number;
+}
+
+const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, type, size }) => {
   function addPizza() {
     dispatch(
       setItem({
@@ -92,4 +102,5 @@ export default function CartItem({ imageUrl, title, price, count, id, type, size
       </div>
     </div>
   );
-}
+};
+export default CartItem;

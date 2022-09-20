@@ -2,27 +2,39 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSortType, setSortOrder } from '../redux/slices/filterSlice';
 
-export default function Sort({ sortOrder }) {
+interface SortTypes {
+  name: string;
+  sort: string;
+}
+interface SortProps {
+  sortOrder: boolean;
+}
+
+type OutsideClick = MouseEvent & {
+  path: Node[];
+};
+const Sort: React.FC<SortProps> = ({ sortOrder }) => {
   const [sortPopup, setSortPopup] = useState(false);
   const sortType = useSelector((state) => state.filterSlice.sort);
   const dispatch = useDispatch();
 
-  const sortTypesBy = [
+  const sortTypesBy: SortTypes[] = [
     { name: 'популярности', sort: 'rating' },
     { name: 'цене', sort: 'price' },
     { name: 'алфавиту', sort: 'title' },
   ];
 
-  function sortClick(type) {
+  function sortClick(type: SortTypes) {
     dispatch(setSortType(type));
     setSortPopup(false);
   }
 
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (!e.path.includes(sortRef.current)) {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const _event = e as OutsideClick;
+      if (sortRef.current && !_event.path.includes(sortRef.current)) {
         setSortPopup(false);
       }
     };
@@ -85,4 +97,5 @@ export default function Sort({ sortOrder }) {
       )}
     </div>
   );
-}
+};
+export default Sort;

@@ -7,12 +7,12 @@ import { useDispatch } from 'react-redux';
 export default function Search() {
   const [localValue, setLocalValue] = React.useState('');
   const dispatch = useDispatch();
-  const inputRef = React.useRef();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   function closeClick() {
     dispatch(setSearchValue(''));
     setLocalValue('');
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,7 +23,7 @@ export default function Search() {
     [],
   );
 
-  function updateValues(event) {
+  function updateValues(event: React.ChangeEvent<HTMLInputElement>) {
     setLocalValue(event.target.value);
     searchDebounce(event.target.value);
   }

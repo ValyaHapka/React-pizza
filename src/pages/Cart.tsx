@@ -5,14 +5,14 @@ import CartItem from '../components/CartItem';
 import { clearItems, selectCart } from '../redux/slices/cartSlice';
 import EmptyCart from './EmptyCart';
 
-export default function NotFoundBlock() {
+export default function Cart() {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector(selectCart);
 
   function clearCart() {
     if (window.confirm('Очистить корзину?')) dispatch(clearItems());
   }
-  const totalCount = items.reduce((sum, i) => sum + i.count, 0);
+  const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
   return (
     <>
       {items.length > 0 ? (
@@ -91,7 +91,7 @@ export default function NotFoundBlock() {
               </div>
             </div>
             <div className="content__items">
-              {items.map((el, i) => (
+              {items.map((el: any, i: number) => (
                 <CartItem key={i} {...el} />
               ))}
             </div>
