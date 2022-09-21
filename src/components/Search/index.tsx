@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './Search.module.scss';
 import debounce from 'lodash.debounce';
 import { setSearchValue } from '../../redux/slices/filterSlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../redux/store';
 
 export default function Search() {
   const [localValue, setLocalValue] = React.useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   function closeClick() {

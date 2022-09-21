@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { setItem, removeItem, minusItem } from '../redux/slices/cartSlice';
+import { setItem, removeItem, minusItem, CartPizza } from '../redux/slices/cartSlice';
+import { useAppDispatch } from '../redux/store';
 
 interface CartItemProps {
   imageUrl: string;
@@ -13,11 +13,13 @@ interface CartItemProps {
 }
 
 const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, type, size }) => {
+  const dispatch = useAppDispatch();
+
   function addPizza() {
     dispatch(
       setItem({
         id,
-      }),
+      } as CartPizza),
     );
   }
 
@@ -25,7 +27,6 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, 
     if (window.confirm('Ты действительно хочешь удалить товар?')) dispatch(removeItem(id));
   }
 
-  const dispatch = useDispatch();
   return (
     <div className="cart__item">
       <div className="cart__item-img">

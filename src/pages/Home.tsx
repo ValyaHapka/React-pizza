@@ -5,27 +5,29 @@ import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setCategoryID, setCurrentPage } from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import { fetchPizzas, PizzaQuery } from '../redux/slices/pizzaSlice';
 import NotFound from './NotFound';
+import { RootState, useAppDispatch } from '../redux/store';
 
 export default function Home() {
-  const searchValue = useSelector((state) => state.filterSlice.searchValue);
+  const searchValue = useSelector((state) => (state as RootState).filterSlice.searchValue);
 
-  const { categoryID, sort, sortOrderAsc, currentPage } = useSelector((state) => state.filterSlice);
-  const { items, status } = useSelector((state) => state.pizzaSlice);
+  const { categoryID, sort, sortOrderAsc, currentPage } = useSelector(
+    (state) => (state as RootState).filterSlice,
+  );
+  const { items, status } = useSelector((state) => (state as RootState).pizzaSlice);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const categoryQuery = categoryID !== 0 ? `category=${categoryID}` : '';
-  const sortQuery = sort.sort;
-  const order = sortOrderAsc ? 'asc' : 'desc';
+  const categoryQuery: string = categoryID !== 0 ? `category=${categoryID}` : '';
+  const sortQuery: string = sort.sort;
+  const order: string = sortOrderAsc ? 'asc' : 'desc';
 
   useEffect(() => {
     const fetchingData = async () => {
       dispatch(
-        // @ts-ignore
         fetchPizzas({
           categoryQuery,
           sortQuery,
@@ -53,8 +55,10 @@ export default function Home() {
       <div className="content__items">
         {status === 'loaded' ? (
           items
-            .filter((pizza: any) => pizza.title.toLowerCase().includes(searchValue.toLowerCase()))
-            .map((pizza: any) => <PizzaBlock {...pizza} key={pizza.id} />)
+            .filter((pizza: PizzaQuery) =>
+              pizza.title.toLowerCase().includes(searchValue.toLowerCase()),
+            )
+            .map((pizza: PizzaQuery) => <PizzaBlock {...pizza} key={pizza.id} />)
         ) : status === 'loading' ? (
           [...new Array(4)].map((_, i) => <Skeleton key={i} />)
         ) : (

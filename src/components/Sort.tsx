@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setSortType, setSortOrder } from '../redux/slices/filterSlice';
+import { RootState, useAppDispatch } from '../redux/store';
 
 interface SortTypes {
   name: string;
@@ -15,8 +16,8 @@ type OutsideClick = MouseEvent & {
 };
 const Sort: React.FC<SortProps> = ({ sortOrder }) => {
   const [sortPopup, setSortPopup] = useState(false);
-  const sortType = useSelector((state) => state.filterSlice.sort);
-  const dispatch = useDispatch();
+  const sortType = useSelector((state: RootState) => state.filterSlice.sort);
+  const dispatch = useAppDispatch();
 
   const sortTypesBy: SortTypes[] = [
     { name: 'популярности', sort: 'rating' },
