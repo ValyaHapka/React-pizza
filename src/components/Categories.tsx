@@ -5,7 +5,7 @@ interface CategoryProps {
   onClickCategory: (id: number) => void;
 }
 
-const Categories: React.FC<CategoryProps> = ({ categoryIndex, onClickCategory }) => {
+const Categories: React.FC<CategoryProps> = React.memo(({ categoryIndex, onClickCategory }) => {
   const categories = [
     'Все 🍕',
     'Мясные 🥩',
@@ -29,5 +29,5 @@ const Categories: React.FC<CategoryProps> = ({ categoryIndex, onClickCategory })
       </ul>
     </div>
   );
-};
+});
 export default Categories;

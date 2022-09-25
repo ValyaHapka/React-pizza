@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ISort {
+export interface ISort {
   name: string;
   sort: string;
 }

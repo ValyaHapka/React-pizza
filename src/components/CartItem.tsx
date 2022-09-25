@@ -1,6 +1,8 @@
+import clsx from 'clsx';
 import React from 'react';
 import { setItem, removeItem, minusItem, CartPizza } from '../redux/slices/cartSlice';
 import { useAppDispatch } from '../redux/store';
+import '../scss/app.scss';
 
 interface CartItemProps {
   imageUrl: string;
@@ -39,8 +41,11 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, 
         </p>
       </div>
       <div className="cart__item-count">
-        <div
-          className="button button--outline button--circle cart__item-count-minus"
+        <button
+          disabled={count === 1}
+          className={clsx('button button--outline button--circle cart__item-count-minus', {
+            'cart__item-count-minus-disabled': count === 1,
+          })}
           onClick={() => dispatch(minusItem(id))}>
           <svg
             width="10"
@@ -57,9 +62,9 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, 
               fill="#EB5A1E"
             />
           </svg>
-        </div>
+        </button>
         <b>{count}</b>
-        <div
+        <button
           className="button button--outline button--circle cart__item-count-plus"
           onClick={addPizza}>
           <svg
@@ -77,7 +82,7 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, price, count, id, 
               fill="#EB5A1E"
             />
           </svg>
-        </div>
+        </button>
       </div>
       <div className="cart__item-price">
         <b>{price} ₽</b>

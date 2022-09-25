@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { setSortType, setSortOrder } from '../redux/slices/filterSlice';
+import { setSortType, setSortOrder, ISort } from '../redux/slices/filterSlice';
 import { RootState, useAppDispatch } from '../redux/store';
 
 interface SortTypes {
@@ -9,12 +9,13 @@ interface SortTypes {
 }
 interface SortProps {
   sortOrder: boolean;
+  sort: ISort;
 }
 
 type OutsideClick = MouseEvent & {
   path: Node[];
 };
-const Sort: React.FC<SortProps> = ({ sortOrder }) => {
+const Sort: React.FC<SortProps> = React.memo(({ sortOrder, sort }) => {
   const [sortPopup, setSortPopup] = useState(false);
   const sortType = useSelector((state: RootState) => state.filterSlice.sort);
   const dispatch = useAppDispatch();
@@ -98,5 +99,5 @@ const Sort: React.FC<SortProps> = ({ sortOrder }) => {
       )}
     </div>
   );
-};
+});
 export default Sort;

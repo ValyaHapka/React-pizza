@@ -42,14 +42,14 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryQuery, sortQuery, order, currentPage]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChangeCategory = React.useCallback((id: number) => dispatch(setCategoryID(id)), []);
+
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          categoryIndex={categoryID}
-          onClickCategory={(id: number) => dispatch(setCategoryID(id))}
-        />
-        <Sort sortOrder={sortOrderAsc} />
+        <Categories categoryIndex={categoryID} onClickCategory={onChangeCategory} />
+        <Sort sortOrder={sortOrderAsc} sort={sort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
